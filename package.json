@@ -1,0 +1,12 @@
+{
+  "name": "capitalflow",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CapitalFlow: educational blockchain-enabled SME invoice financing prototype (test tokens only)",
+  "workspaces": ["contracts"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "contracts:compile": "npm run compile -w contracts",
+    "contracts:test": "npm run test -w contracts"
+  }
+}

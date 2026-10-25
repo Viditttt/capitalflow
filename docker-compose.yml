@@ -1,0 +1,14 @@
+services:
+  db:
+    image: postgres:16
+    container_name: capitalflow-db
+    environment:
+      POSTGRES_USER: capitalflow
+      POSTGRES_PASSWORD: capitalflow
+      POSTGRES_DB: capitalflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - capitalflow-pgdata:/var/lib/postgresql/data
+volumes:
+  capitalflow-pgdata:

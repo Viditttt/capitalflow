@@ -1,0 +1,18 @@
+node_modules/
+.env
+.env.*
+!.env.example
+.next/
+dist/
+coverage/
+# Hardhat
+contracts/artifacts/
+contracts/cache/
+contracts/types/
+contracts/ignition/deployments/chain-31337/
+# Uploaded demo documents (never commit)
+frontend/storage/
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
