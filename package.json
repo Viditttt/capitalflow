@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "description": "CapitalFlow: educational blockchain-enabled SME invoice financing prototype (test tokens only)",
   "workspaces": [
-    "contracts"
+    "contracts",
+    "frontend"
   ],
   "engines": {
     "node": ">=22"
@@ -14,6 +15,9 @@
     "contracts:test": "npm run test -w contracts",
     "contracts:node": "npm run node -w contracts",
     "contracts:deploy:local": "npm run deploy:local -w contracts",
-    "contracts:verify:local": "npm run verify:local -w contracts"
+    "contracts:verify:local": "npm run verify:local -w contracts",
+    "frontend:dev": "npm run dev -w frontend",
+    "frontend:build": "npm run build -w frontend",
+    "dev": "npm run dev -w frontend"
   }
 }

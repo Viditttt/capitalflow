@@ -1,0 +1,181 @@
+// CapitalFlow Prisma Schema (PostgreSQL)
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  VERIFIER
+  SUPPLIER
+  FINANCIER
+  DEMO_PAYER
+}
+
+enum InvoiceStatus {
+  UNKNOWN
+  SUBMITTED
+  VERIFIED
+  REJECTED
+  FLAGGED
+  FINANCED
+  SETTLED
+  DISPUTED
+}
+
+enum OfferStatus {
+  UNKNOWN
+  OPEN
+  ACCEPTED
+  CANCELLED
+  EXPIRED
+  VOIDED
+}
+
+enum FinancingStatus {
+  NONE
+  ACTIVE
+  SETTLED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  walletAddress String    @unique
+  role          Role      @default(SUPPLIER)
+  businessName  String?
+  gstin         String?
+  email         String?
+  sector        String?
+  isVerified    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  invoices      Invoice[] @relation("SupplierInvoices")
+  offers        FinancingOffer[]
+  auditLogs     AuditLog[]
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  onChainId       BigInt?       @unique
+  invoiceNumber   String        @unique
+  invoiceKey      String        @unique
+  documentHash    String        @unique
+  faceValue       BigInt
+  issueDate       DateTime
+  dueDate         DateTime
+  status          InvoiceStatus @default(SUBMITTED)
+
+  // Buyer & Commercial Metadata
+  buyerName       String
+  buyerGstin      String
+  sector          String
+  description     String?
+  goodsSummary    String?
+
+  // Relations
+  supplierId      String
+  supplier        User          @relation("SupplierInvoices", fields: [supplierId], references: [id])
+  documents       InvoiceDocument[]
+  offers          FinancingOffer[]
+  financing       Financing?
+  riskAssessment  RiskAssessment?
+  auditLogs       AuditLog[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([status])
+  @@index([buyerGstin])
+}
+
+model InvoiceDocument {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  fileName    String
+  fileHash    String
+  fileSize    Int
+  mimeType    String
+  uploadedAt  DateTime @default(now())
+}
+
+model FinancingOffer {
+  id                String      @id @default(cuid())
+  onChainOfferId    BigInt?     @unique
+  invoiceId         String
+  invoice           Invoice     @relation(fields: [invoiceId], references: [id])
+  financierId       String
+  financier         User        @relation(fields: [financierId], references: [id])
+
+  principal         BigInt
+  fee               BigInt
+  advanceRateBps    Int
+  validitySeconds   Int
+  expiryTimestamp   DateTime
+  status            OfferStatus @default(OPEN)
+  impliedApr        Float
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  financing         Financing?
+
+  @@index([invoiceId])
+  @@index([status])
+}
+
+model Financing {
+  id            String          @id @default(cuid())
+  onChainId     BigInt?         @unique
+  invoiceId     String          @unique
+  invoice       Invoice         @relation(fields: [invoiceId], references: [id])
+  offerId       String          @unique
+  offer         FinancingOffer  @relation(fields: [offerId], references: [id])
+
+  principal     BigInt
+  fee           BigInt
+  serviceFee    BigInt
+  totalDue      BigInt
+  fundedAt      DateTime        @default(now())
+  maturity      DateTime
+  settledAt     DateTime?
+  status        FinancingStatus @default(ACTIVE)
+
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model RiskAssessment {
+  id                 String   @id @default(cuid())
+  invoiceId          String   @unique
+  invoice            Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  score              Int
+  grade              String
+  buyerConcentration Float
+  ageingDays         Int
+  disputeHistory     Int      @default(0)
+  gstnVerified       Boolean  @default(true)
+  computedAt         DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String
+  txHash      String?
+  blockNumber Int?
+  actorId     String?
+  actor       User?    @relation(fields: [actorId], references: [id])
+  invoiceId   String?
+  invoice     Invoice? @relation(fields: [invoiceId], references: [id])
+  details     Json?
+  createdAt   DateTime @default(now())
+
+  @@index([action])
+  @@index([txHash])
+}

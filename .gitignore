@@ -12,6 +12,7 @@ contracts/types/
 contracts/ignition/deployments/chain-31337/
 # Uploaded demo documents (never commit)
 frontend/storage/
+*.tsbuildinfo
 *.log
 .DS_Store
 .vscode/*
