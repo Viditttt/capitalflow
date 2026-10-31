@@ -6,7 +6,7 @@ import InvoiceRegistryABI from './contracts/abis/InvoiceRegistry.json'
 import FinancingMarketplaceABI from './contracts/abis/FinancingMarketplace.json'
 
 // ─── Chain Configuration ───
-export const CHAIN_ID = Number(process.env.NEXT_PUBLIC_CHAIN_ID || '31337')
+export const CHAIN_ID = Number(process.env.NEXT_PUBLIC_CHAIN_ID || '11155111')
 
 // ─── Contract Addresses ───
 const addresses = (_addresses as unknown as Record<string, Record<string, any>>)[String(CHAIN_ID)]

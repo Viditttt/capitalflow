@@ -1,26 +1,24 @@
 import { http, createConfig } from 'wagmi'
-import { hardhat } from 'wagmi/chains'
+import { sepolia, hardhat } from 'wagmi/chains'
 import { injected } from 'wagmi/connectors'
 
 /**
  * Wagmi configuration for CapitalFlow.
- *
- * Connects to a local Hardhat node by default (chainId 31337).
- * MetaMask is the only supported connector.
- *
- * To use a testnet, add the chain config here and set NEXT_PUBLIC_RPC_URL.
+ * Supports Ethereum Sepolia testnet (11155111) and local Hardhat (31337).
  */
+const alchemyRpc = 'https://eth-sepolia.g.alchemy.com/v2/alch_rYyIEkPm8UUFkZsXEm1bF'
+const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || alchemyRpc
+
 export const config = createConfig({
-  chains: [hardhat],
+  chains: [sepolia, hardhat],
   connectors: [
     injected({
       target: 'metaMask',
     }),
   ],
   transports: {
-    [hardhat.id]: http(
-      process.env.NEXT_PUBLIC_RPC_URL || 'http://127.0.0.1:8545'
-    ),
+    [sepolia.id]: http(rpcUrl),
+    [hardhat.id]: http('http://127.0.0.1:8545'),
   },
 })
 

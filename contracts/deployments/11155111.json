@@ -1,0 +1,20 @@
+{
+  "chainId": 11155111,
+  "network": "sepolia",
+  "startBlock": 12035078,
+  "deployedAt": "2026-10-31T16:39:40.845Z",
+  "contracts": {
+    "MockINRToken": "0x061131caC9b04B791d6Ca220D88808bE130ee7f3",
+    "InvoiceRegistry": "0x891fB325e681850d4a43020A42c8B3C0C466e50D",
+    "FinancingMarketplace": "0xA7cA1a1Ea4E47E9c4dED3f0d4c451A05397275F9"
+  },
+  "roles": {
+    "admin": "0x8aD909C9C687F4FDfdbAb65a9e9956073711Faeb",
+    "verifier": "0x8aD909C9C687F4FDfdbAb65a9e9956073711Faeb",
+    "demoPayer": "0x8aD909C9C687F4FDfdbAb65a9e9956073711Faeb",
+    "treasury": "0x8aD909C9C687F4FDfdbAb65a9e9956073711Faeb",
+    "financiers": [
+      "0x8aD909C9C687F4FDfdbAb65a9e9956073711Faeb"
+    ]
+  }
+}

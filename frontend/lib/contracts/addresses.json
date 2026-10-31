@@ -4,5 +4,11 @@
     "InvoiceRegistry": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
     "FinancingMarketplace": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
     "startBlock": 0
+  },
+  "11155111": {
+    "MockINRToken": "0x061131caC9b04B791d6Ca220D88808bE130ee7f3",
+    "InvoiceRegistry": "0x891fB325e681850d4a43020A42c8B3C0C466e50D",
+    "FinancingMarketplace": "0xA7cA1a1Ea4E47E9c4dED3f0d4c451A05397275F9",
+    "startBlock": 12035078
   }
 }
